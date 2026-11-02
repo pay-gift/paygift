@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>E-Wallet (Demo)</title>
+<style>
+*{box-sizing:border-box;margin:0;font-family:system-ui,sans-serif}
+body{background:#e8ecf5;display:flex;justify-content:center}
+#app{width:100%;max-width:430px;min-height:100vh;background:#f3f5fb;position:relative;padding-bottom:80px}
+.hdr{background:linear-gradient(90deg,#1e4fa3,#18a05a);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;font-size:13px}
+.hdr b{display:block;font-size:14px}.hdr .sp{flex:1}.pro{background:#ffffff33;border-radius:8px;padding:1px 6px;font-size:10px}
+.ic{width:34px;height:34px;border-radius:50%;background:#ffffff26;display:grid;place-items:center;cursor:pointer}
+.wrap{padding:14px}
+.bal{background:linear-gradient(135deg,#2a5fb8,#1fa464);border-radius:20px;padding:18px;color:#fff;box-shadow:0 8px 20px #1e4fa344}
+.bal small{opacity:.85}.bal h1{font-size:34px;margin:6px 0 16px}
+.acts{display:flex;justify-content:space-between}.act{text-align:center;font-size:11px;cursor:pointer;flex:1}
+.act i{display:grid;place-items:center;width:44px;height:44px;margin:0 auto 4px;border-radius:12px;font-style:normal;font-size:20px;background:#7b6cf0}
+.act:nth-child(2) i{background:#b45fe0}.act:nth-child(3) i{background:#2fb7c9}.act:nth-child(4) i{background:#7a63e8}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.st{background:#fff;border-radius:16px;padding:14px;box-shadow:0 2px 8px #0001}.st small{color:#667;font-size:11px}.st b{display:block;margin-top:4px;font-size:16px}
+.g{color:#0a9b5c}.r{color:#d6246e}
+.sec{display:flex;justify-content:space-between;color:#1e4fa3;font-weight:600;font-size:14px;margin:6px 0 10px}.sec a{font-size:12px;color:#556;cursor:pointer}
+.row{background:#fff;border-radius:14px;padding:12px;margin-bottom:10px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 6px #0001}
+.dot{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:16px}
+.row div.m{flex:1;font-size:13px}.row small{color:#889;font-size:11px;display:block}
+.tag{font-size:10px;background:#d8f6e6;color:#0a9b5c;border-radius:8px;padding:1px 6px}.tag.p{background:#fff1cc;color:#b27a00}
+.row .amt{font-weight:700;font-size:13px;text-align:right}
+.card{background:#fff;border-radius:18px;padding:16px;box-shadow:0 2px 8px #0001;margin-bottom:12px}
+label{display:block;font-size:11px;font-weight:700;color:#556;margin:12px 0 5px;text-transform:uppercase}
+input,select{width:100%;padding:12px;border:1px solid #dde2ee;border-radius:12px;font-size:14px;background:#fafbff}
+input:focus{outline:2px solid #6c63f0;border-color:#6c63f0}
+.btn{width:100%;margin-top:16px;padding:13px;border:0;border-radius:12px;background:linear-gradient(90deg,#4a5bd8,#7b3fe0);color:#fff;font-weight:700;font-size:15px;cursor:pointer}
+.btn.red{background:#e0245e}.btn.o{background:#fff;color:#4a5bd8;border:1px solid #4a5bd8}
+.nav{position:fixed;bottom:0;width:100%;max-width:430px;background:#fff;display:flex;justify-content:space-around;padding:8px 0 12px;box-shadow:0 -4px 14px #0002;border-radius:18px 18px 0 0}
+.nav div{text-align:center;font-size:10px;color:#667;cursor:pointer;flex:1}.nav div.on{color:#4a5bd8;font-weight:700}.nav span{display:block;font-size:19px}
+.nav .vip span{width:52px;height:52px;margin:-26px auto 0;border-radius:50%;background:linear-gradient(135deg,#f6a21e,#e0357a,#7b3fe0);display:grid;place-items:center;color:#fff;border:4px solid #fff}
+.tabs{display:flex;background:#fff;border-radius:20px;padding:4px;margin-bottom:12px}.tabs div{flex:1;text-align:center;padding:8px;border-radius:16px;font-size:13px;cursor:pointer}.tabs .on{background:#4a5bd8;color:#fff}
+.auth{padding:30px 20px}.auth .card{padding:22px}.auth h2{text-align:center}.auth p{text-align:center;color:#778;font-size:12px;margin:4px 0 8px}
+.lnk{text-align:center;margin-top:14px;font-size:13px;color:#4a5bd8;cursor:pointer}
+.back{display:flex;align-items:center;gap:8px;font-weight:700;font-size:17px;margin-bottom:12px;cursor:pointer}
+.toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;z-index:9}
+.note{background:#fff0f3;color:#c0204e;border-radius:10px;padding:10px;font-size:12px;margin-top:10px}
+.demo{background:#fff8dc;text-align:center;font-size:11px;padding:4px;color:#8a6d00}
+.prof{background:linear-gradient(135deg,#1e4fa3,#7b3fe0);color:#fff;border-radius:18px;padding:18px;display:flex;gap:14px;align-items:center;margin-bottom:12px}
+.av{width:52px;height:52px;border-radius:50%;background:#18a05a;display:grid;place-items:center;font-size:22px;font-weight:700}
+.bar{display:flex;align-items:flex-end;gap:8px;height:120px;margin-top:10px}.bar i{flex:1;background:linear-gradient(#7b3fe0,#4a5bd8);border-radius:6px 6px 0 0;display:block}
+</style></head><body><div id="app"></div>
+<script>
+const $=s=>document.querySelector(s),KEY='ewallet_demo_v1';
+let S=JSON.parse(localStorage.getItem(KEY)||'null')||{user:null,bal:0,comm:0,dep:0,wd:0,tx:[],kyc:'none',gw:{owner:'',num:'',pw:''}};
+let view='home',tab='All',authMode='reg';
+const save=()=>localStorage.setItem(KEY,JSON.stringify(S));
+const fmt=n=>'BDT '+(+n).toFixed(n%1?1:0);
+const toast=m=>{const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),2200)};
+const now=()=>new Date().toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+function add(type,amt,status,extra={}){S.tx.unshift({type,amt,status,time:now(),method:'bKash',...extra});save()}
+const go=v=>{view=v;render()};
+function nav(){const n=[['home','🏠','Home'],['history','📄','History'],['vip','👑','VIP'],['insight','📊','Insight'],['account','👤','Account']];
+return `<div class="nav">${n.map(([k,i,l])=>`<div class="${k=='vip'?'vip ':''}${view==k?'on':''}" onclick="go('${k}')"><span>${i}</span>${l}</div>`).join('')}</div>`}
+function hdr(){return `<div class="demo">DEMO ONLY — no real money</div><div class="hdr"><div class="ic" onclick="toast('Menu')">☰</div><div><small>Hello, ${S.user.name}</small><b>Welcome Back! <span class="pro">👑 PRO</span></b></div><div class="sp"></div><div class="ic" onclick="toast('Download app (demo)')">⬇</div><div class="ic" onclick="toast('2 notifications')">🔔</div></div>`}
+const icon={Deposit:['#ef3b66','↓'],Withdraw:['#18b36b','↑'],Commission:['#6c63f0','▣'],Payment_approved:['#6c63f0','▣']};
+function txRow(t){const [c,i]=icon[t.type]||['#6c63f0','•'],neg=t.type=='Deposit';
+return `<div class="row"><div class="dot" style="background:${c}">${i}</div><div class="m"><b>${t.type}</b><small>${t.method} · ${t.time}</small></div><div><div class="amt ${neg?'r':'g'}">${neg?'-':'+'}BDT ${t.amt}</div><span class="tag ${t.status=='Pending'?'p':''}">${t.status}</span></div></div>`}
+function authV(){const reg=authMode=='reg';
+return `<div class="auth"><div style="font-weight:700;margin-bottom:20px">💳 E-Wallet</div><div class="card"><h2>${reg?'Create Account':'Welcome Back'}</h2><p>${reg?'Register your secure wallet profile':'Login to your wallet'}</p>
+${reg?'<label>Full Name</label><input id="fn" placeholder="Full name"><label>Username</label><input id="un" placeholder="username"><label>Phone</label><input id="ph" type="tel" placeholder="01XXXXXXXXX"><label>Email</label><input id="em" type="email" placeholder="email@example.com">':'<label>Username</label><input id="un" placeholder="username">'}
+<label>Password</label><input id="pw" type="password" placeholder="••••••••">${reg?'<label>Confirm Password</label><input id="pw2" type="password" placeholder="••••••••">':''}
+<button class="btn" onclick="${reg?'register()':'login()'}">${reg?'Create Account':'Login'}</button>
+<div class="lnk" onclick="authMode='${reg?'login':'reg'}';render()">${reg?'Already have an account? Login':'New here? Create account'}</div></div></div>`}
+function register(){const v=id=>$('#'+id).value.trim();
+if(!v('fn')||!v('un')||!/^01\d{9}$/.test(v('ph')))return toast('Enter name, username & valid phone');
+if(v('pw').length<6)return toast('Password min 6 chars');if(v('pw')!=v('pw2'))return toast('Passwords do not match');
+S.user={name:v('fn'),user:v('un'),phone:v('ph'),email:v('em'),pw:v('pw'),id:'a'+Math.floor(Math.random()*9000+1000)};save();view='home';render()}
+function login(){const u=$('#un').value.trim(),p=$('#pw').value;if(S.user&&S.user.user==u&&S.user.pw==p){S.loggedOut=false;save();render()}else toast('Wrong username or password')}
+function homeV(){const live=S.tx.slice(0,4);
+return `${hdr()}<div class="wrap"><div class="bal"><small>◈ Wallet Balance</small><h1>${fmt(S.bal)}</h1><div class="acts">
+<div class="act" onclick="go('add')"><i>⊕</i>Add Balance</div><div class="act" onclick="go('wd')"><i>⇧</i>Withdraw</div><div class="act" onclick="go('gw')"><i>▭</i>Gateway</div><div class="act" onclick="toast('Users: 1 (you)')"><i>👥</i>Users</div></div></div>
+<div class="grid"><div class="st"><small>Today Commission</small><b class="g">${fmt(S.comm)}</b></div><div class="st"><small>Total Commission</small><b class="r">${fmt(S.comm)}</b></div><div class="st"><small>Today Deposit</small><b>${fmt(S.dep)}</b></div><div class="st"><small>Today Withdraw</small><b>${fmt(S.wd)}</b></div></div>
+<div class="sec"><span>〜 Live Activity</span><a onclick="go('history')">See all ›</a></div>${live.length?live.map(txRow).join(''):'<div class="card" style="text-align:center;color:#99a">📥<br>No activity yet</div>'}</div>`}
+function addV(){return `${hdr()}<div class="wrap"><div class="back" onclick="go('home')">← Add Balance</div><div class="card"><label>Send Money to (bKash Personal)</label><input value="01XXXXXXXXX (demo number)" readonly><div class="note">Send Money or Cash In only. After payment, paste the TRX ID below.</div>
+<label>Amount (BDT)</label><input id="amt" type="number" placeholder="5000"><label># Transaction ID</label><input id="trx" placeholder="Paste TRX ID after Send Money">
+<button class="btn" onclick="deposit()">Confirm Send Money</button></div></div>`}
+function deposit(){const a=+$('#amt').value,t=$('#trx').value.trim();if(a<50)return toast('Minimum BDT 50');if(t.length<6)return toast('Enter valid TRX ID');
+const c=+(a*0.0095).toFixed(1);S.bal+=a;S.dep+=a;S.comm+=c;add('Payment_approved',a,'Approved',{trx:t});add('Commission',c,'Approved');toast('Balance added (demo)');go('home')}
+function wdV(){return `${hdr()}<div class="wrap"><div class="back" onclick="go('home')">← Withdraw</div><div class="card"><small>Available: <b>${fmt(S.bal)}</b></small>
+<label>Method</label><select id="m"><option>bKash</option><option>Nagad</option><option>Rocket</option></select><label>Number</label><input id="num" type="tel" placeholder="01XXXXXXXXX"><label>Amount (BDT)</label><input id="amt" type="number" placeholder="1000">
+<button class="btn" onclick="withdraw()">Request Withdraw</button></div></div>`}
+function withdraw(){const a=+$('#amt').value;if(!/^01\d{9}$/.test($('#num').value))return toast('Invalid number');if(a<50||a>S.bal)return toast(a>S.bal?'Insufficient balance':'Minimum BDT 50');
+S.bal-=a;S.wd+=a;add('Withdraw',a,'Pending',{method:$('#m').value});toast('Withdraw requested');go('home')}
+function gwV(){const g=S.gw;return `${hdr()}<div class="wrap"><div class="card"><div class="back" onclick="go('home')">← Edit Payment Gateway <small style="font-weight:400">bKash Personal</small></div>
+<label>Owner Name</label><input id="o" value="${g.owner}"><label>Account Number</label><input id="n" value="${g.num}" placeholder="Enter your number here"><label>Password</label><input id="p" type="password" value="${g.pw}" placeholder="Website login password"><small style="color:#889">Use the password you set during registration</small>
+<label>Status</label><select id="s"><option>Active</option><option>Inactive</option></select><button class="btn" onclick="S.gw={owner:$('#o').value,num:$('#n').value,pw:$('#p').value};save();toast('Gateway saved');go('home')">Save Gateway</button></div></div>`}
+function histV(){return `${hdr()}<div class="wrap"><div class="back">History</div>${S.tx.length?S.tx.map(txRow).join(''):'<div class="card" style="text-align:center;color:#99a">No transactions yet</div>'}</div>`}
+function vipV(){const f=['bonus','Deposit','Withdraw'].includes(tab)?0:0;const l=S.tx.filter(t=>tab=='All'||(tab=='Deposit'&&t.type.match(/Payment|Deposit/))||(tab=='Withdraw'&&t.type=='Withdraw'));
+return `${hdr()}<div class="wrap"><div class="back" onclick="go('home')">← Bonus Task</div><div class="tabs">${['All','Deposit','Withdraw'].map(x=>`<div class="${tab==x?'on':''}" onclick="tab='${x}';render()">${x}</div>`).join('')}</div>
+${l.length?l.map(t=>`<div class="card"><b>${t.type.replace('_',' ')}</b> <span class="g" style="float:right">+BDT ${t.amt}</span><br><small style="color:#889">Method: ${t.method} · ${t.time}</small><br><span class="tag">${t.status}</span></div>`).join(''):'<div class="card" style="text-align:center;color:#99a">No tasks yet</div>'}</div>`}
+function insV(){const v=[S.dep,S.wd,S.comm,S.bal],mx=Math.max(...v,1);
+return `${hdr()}<div class="wrap"><div class="back">Insight</div><div class="card"><b>Overview</b><div class="bar">${v.map(x=>`<i style="height:${Math.max(4,x/mx*100)}%"></i>`).join('')}</div><div style="display:flex;gap:8px;font-size:11px;color:#667;margin-top:6px">${['Deposit','Withdraw','Commission','Balance'].map(x=>`<span style="flex:1;text-align:center">${x}</span>`).join('')}</div></div></div>`}
+function kycV(){const k=S.kyc;return `${hdr()}<div class="wrap"><div class="back" onclick="go('account')">← KYC Verification</div><small style="color:#667">All documents will be verified by admin. No automatic approval.</small>
+${k=='none'?`<div class="card"><label>Full Name</label><input id="kn" value="${S.user.name}"><label>Mobile Number</label><input id="kp" value="${S.user.phone}"><label>NID Number</label><input id="ki" placeholder="NID number"><button class="btn" onclick="if($('#ki').value.length<8)return toast('Enter NID');S.kyc='pending';save();render()">Submit</button></div>`:`<div class="card" style="text-align:center;margin-top:14px"><div style="font-size:40px">📄</div><span class="tag p">Pending Admin Review</span><h3 style="margin:10px 0">Your NID verification is in progress</h3><small style="color:#889">Status will update once admin verification is complete.</small></div>`}</div>`}
+function accV(){const u=S.user;return `${hdr()}<div class="wrap"><div class="prof"><div class="av">${u.name[0].toUpperCase()}</div><div><b>${u.phone}</b><br><small>${u.name} · ${S.kyc=='none'?'KYC Not Submitted':'KYC Pending'}</small></div></div>
+<div class="card"><small>PHONE</small><br>${u.phone}<br><br><small>EMAIL</small><br>${u.email||'—'}<br><br><small>USER ID</small><br>${u.id}</div>
+<div class="card" onclick="go('kyc')" style="cursor:pointer">🛡 KYC Verification ›</div><div class="card" onclick="go('gw')" style="cursor:pointer">▭ Payment Gateway ›</div>
+<button class="btn red" onclick="S.loggedOut=true;authMode='login';save();render()">Logout</button><button class="btn o" onclick="if(confirm('Erase all demo data?')){localStorage.removeItem(KEY);location.reload()}">Reset demo data</button></div>`}
+function render(){const a=$('#app');if(!S.user||S.loggedOut){a.innerHTML=authV();return}
+const V={home:homeV,add:addV,wd:wdV,gw:gwV,history:histV,vip:vipV,insight:insV,account:accV,kyc:kycV};a.innerHTML=V[view]()+nav();scrollTo(0,0)}
+render();
+</script></body></html>
